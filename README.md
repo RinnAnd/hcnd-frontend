@@ -1,30 +1,18 @@
-# React + TypeScript + Vite
+# Iniciar parte frontend del challenge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Ejecutar proyecto
+El proyecto fue creado con React + Vite. Para ejecutarlo debemos ubicarnos en la dirección root del proyecto en la terminal y luego instalar todas las dependencias del proyecto con `npm install` recomendablemente en la versión 20 de node como mínimo. Luego de esto se ejecuta en modo --watch con el comando `npm run dev`.
 
-Currently, two official plugins are available:
+Esto nos dará una respuesta como la siguiente:
+```bash
+VITE v5.2.11  ready in 1761 ms
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+➜  Local:   http://localhost:5173/
+➜  Network: use --host to expose
+➜  press h + enter to show help
 ```
+Esto nos revela el host en el cuál se iniciará el proyecto, podemos hacer Ctrl + clic en la dirección http://localhost:5173/
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Esto revelará el landing del challenge que es una vista de Login o Signup, ya a partir de este momento espero que la aplicación sea lo suficientemente intuitiva.
+
+De tener algún problema con la ejecución del proyecto por favor contactarme.

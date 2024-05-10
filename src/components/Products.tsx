@@ -127,15 +127,24 @@ const Products: FC<ProductsProps> = () => {
         </>
       )}
       <div className="flex flex-wrap gap-3 w-full justify-center p-4">
-        {products?.slice(0, showCount).map((prd: Product) => (
-          <ProductCard
-            key={prd.id}
-            product={prd}
-            setCurrentProduct={setCurrentProduct}
-            setOpenDelete={setOpenDelete}
-            setProductId={setProductId}
-          />
-        ))}
+        {products?.length ? (
+          products
+            ?.slice(0, showCount)
+            .map((prd: Product) => (
+              <ProductCard
+                key={prd.id}
+                product={prd}
+                setCurrentProduct={setCurrentProduct}
+                setOpenDelete={setOpenDelete}
+                setProductId={setProductId}
+              />
+            ))
+        ) : (
+          <div className="w-full text-center">
+            <h1 className="text-4xl">No hay productos disponibles.</h1>
+            <p>Por favor agrega un producto para comenzar.</p>
+          </div>
+        )}
       </div>
       {showCount < products.length && (
         <button
