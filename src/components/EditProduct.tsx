@@ -11,11 +11,13 @@ interface EditProductProps {
 const Input = ({
   placeholder,
   value,
+  type,
   name,
   onChange,
 }: {
   placeholder: string;
   value: string | number | undefined;
+  type: string;
   name: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
@@ -24,7 +26,7 @@ const Input = ({
       <p className="w-1/6 text-sm text-center">{placeholder}</p>
       <input
         className="bg-slate-400 h-9 p-2 text-black w-4/6 rounded-md"
-        type="text"
+        type={type}
         name={name}
         placeholder={placeholder}
         value={value}
@@ -72,12 +74,14 @@ const EditProduct: FC<EditProductProps> = ({ product, setCurrentProduct }) => {
         <Input
           placeholder="Handle"
           value={fields?.handle}
+          type="text"
           name="handle"
           onChange={handleChange}
         />
         <Input
           placeholder="Título"
           value={fields?.title}
+          type="text"
           name="title"
           onChange={handleChange}
         />
@@ -94,36 +98,42 @@ const EditProduct: FC<EditProductProps> = ({ product, setCurrentProduct }) => {
         <Input
           placeholder="Precio"
           value={fields?.price}
+          type="number"
           name="price"
           onChange={handleChange}
         />
         <Input
           placeholder="Stock"
           value={fields?.stock}
+          type="number"
           name="stock"
           onChange={handleChange}
         />
         <Input
           placeholder="SKU"
           value={fields?.sku}
+          type="number"
           name="sku"
           onChange={handleChange}
         />
         <Input
           placeholder="Gramos"
           value={fields?.grams}
+          type="number"
           name="grams"
           onChange={handleChange}
         />
         <Input
           placeholder="Precio referencia"
           value={fields?.comparePrice}
+          type="number"
           name="comparePrice"
           onChange={handleChange}
         />
         <Input
           placeholder="Código de barras"
           value={fields?.barcode}
+          type="number"
           name="barcode"
           onChange={handleChange}
         />
