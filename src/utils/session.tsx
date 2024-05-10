@@ -7,8 +7,8 @@ const SessionCheck: FC = () => {
 
   useEffect(() => {
     const session = {
-      user: sessionStorage.getItem("user"),
-      token: sessionStorage.getItem("token"),
+      user: localStorage.getItem("user"),
+      token: localStorage.getItem("token"),
     };
     if (!session.user || !session.token) {
       navigate("/");

@@ -46,8 +46,8 @@ const Register: FC<RegisterProps> = ({ setRegister }) => {
         password: fields.password,
       });
       const session = await autoLogin?.json();
-      sessionStorage.setItem("user", JSON.stringify(session?.name));
-      sessionStorage.setItem("token", JSON.stringify(session?.jwt));
+      localStorage.setItem("user", JSON.stringify(session?.name));
+      localStorage.setItem("token", JSON.stringify(session?.jwt));
       window.location.reload();
     }
   };

@@ -73,7 +73,7 @@ const CreateProduct: FC<CreateProductProps> = ({ showCreate, setCreateSuccess })
     }, 3000);
   }
 
-  const token = JSON.parse(sessionStorage.getItem("token")!);
+  const token = JSON.parse(localStorage.getItem("token")!);
 
   async function handleSubmit() {
     if (!validateFields()) {

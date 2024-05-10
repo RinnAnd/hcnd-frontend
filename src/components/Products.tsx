@@ -38,16 +38,16 @@ const Products: FC<ProductsProps> = () => {
     setShowCount((prevShowCount) => prevShowCount + 6);
   };
 
-  const currentUser = JSON.parse(sessionStorage.getItem("user")!);
+  const currentUser = JSON.parse(localStorage.getItem("user")!);
 
   const logOut = () => {
-    sessionStorage.removeItem("user");
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     window.location.reload();
   };
 
   async function handleDelete(id: number) {
-    const token = JSON.parse(sessionStorage.getItem("token")!);
+    const token = JSON.parse(localStorage.getItem("token")!);
     console.log(token);
     const response = await RequestWithToken(`product/${id}`, "DELETE", token);
     if (response?.status === 401) {

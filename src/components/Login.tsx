@@ -49,8 +49,8 @@ const Login: FC<LoginProps> = ({ setRegister }) => {
       setOpenError(true);
       return;
     }
-    sessionStorage.setItem("user", JSON.stringify(session.name));
-    sessionStorage.setItem("token", JSON.stringify(session.jwt));
+    localStorage.setItem("user", JSON.stringify(session.name));
+    localStorage.setItem("token", JSON.stringify(session.jwt));
     navigate("/home");
   };
 

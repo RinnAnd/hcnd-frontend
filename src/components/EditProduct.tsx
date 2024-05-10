@@ -37,7 +37,7 @@ const Input = ({
 };
 
 const EditProduct: FC<EditProductProps> = ({ product, setCurrentProduct }) => {
-  const token = JSON.parse(sessionStorage.getItem("token")!);
+  const token = JSON.parse(localStorage.getItem("token")!);
   const [fields, setFields] = useState<Product | null>(product);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!fields) return;
