@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { motion } from "framer-motion";
 import { Request } from "../utils/requests";
+import ErrorModal from "./error.modal";
 
 interface RegisterProps {
   setRegister: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,6 +13,7 @@ const Register: FC<RegisterProps> = ({ setRegister }) => {
     email: "",
     password: "",
   });
+  const [openError, setOpenError] = useState(false);
 
   const [errorFields, setErrorFields] = useState({
     name: false,
@@ -40,6 +42,14 @@ const Register: FC<RegisterProps> = ({ setRegister }) => {
     }
 
     const response = await Request("user", "POST", fields);
+    if (response?.status === 409) {
+      setOpenError(true);
+      setErrorFields({
+        ...errorFields,
+        email: true,
+      });
+      return;
+    }
     if (response?.status === 201) {
       const autoLogin = await Request("user/auth", "POST", {
         email: fields.email,
@@ -65,6 +75,12 @@ const Register: FC<RegisterProps> = ({ setRegister }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
+      {openError && (
+        <ErrorModal
+          message="Parece que ya tienes una cuenta con este email"
+          close={setOpenError}
+        />
+      )}
       <div
         className="flex justify-evenly flex-col items-center
         border bg-slate-50 rounded-md w-96 py-8 px-5"
