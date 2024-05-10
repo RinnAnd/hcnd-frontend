@@ -12,8 +12,33 @@ const Register: FC<RegisterProps> = ({ setRegister }) => {
     email: "",
     password: "",
   });
+
+  const [errorFields, setErrorFields] = useState({
+    name: false,
+    email: false,
+    password: false,
+  });
+
+  function validateFields() {
+    for (const key in fields) {
+      if (fields[key as keyof typeof fields] === "") {
+        setErrorFields({
+          ...errorFields,
+          [key]: true,
+        });
+        return false;
+      }
+    }
+    return true;
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!validateFields()) {
+      return;
+    }
+
     const response = await Request("user", "POST", fields);
     if (response?.status === 201) {
       const autoLogin = await Request("user/auth", "POST", {
@@ -54,11 +79,13 @@ const Register: FC<RegisterProps> = ({ setRegister }) => {
           >
             <div className="flex flex-col">
               <label className="text-black" htmlFor="name">
-                Name
+                Nombre
               </label>
               <input
-                className="bg-transparent border border-slate-300 h-10 rounded-md p-3 active:bg-transparent focus:outline-none text-black"
-                placeholder="Name"
+                className={`bg-transparent border ${
+                  errorFields.name ? "border-red-500" : "border-slate-300"
+                } h-10 rounded-md p-3 active:bg-transparent focus:outline-none text-black`}
+                placeholder="Nombre"
                 type="text"
                 id="name"
                 name="name"
@@ -68,7 +95,9 @@ const Register: FC<RegisterProps> = ({ setRegister }) => {
                 Email
               </label>
               <input
-                className="bg-transparent border border-slate-300 h-10 rounded-md p-3 active:bg-transparent focus:outline-none text-black"
+                className={`bg-transparent border ${
+                  errorFields.email ? "border-red-500" : "border-slate-300"
+                } h-10 rounded-md p-3 active:bg-transparent focus:outline-none text-black`}
                 placeholder="Email"
                 type="email"
                 id="email"
@@ -76,11 +105,13 @@ const Register: FC<RegisterProps> = ({ setRegister }) => {
                 onChange={handleChange}
               />
               <label className="text-black" htmlFor="password">
-                Password
+                Contraseña
               </label>
               <input
-                className="bg-transparent border border-slate-300 h-10 rounded-md p-3 active:bg-transparent focus:outline-none text-black"
-                placeholder="Password"
+                className={`bg-transparent border ${
+                  errorFields.password ? "border-red-500" : "border-slate-300"
+                } h-10 rounded-md p-3 active:bg-transparent focus:outline-none text-black`}
+                placeholder="Contraseña"
                 type="password"
                 id="password"
                 name="password"
@@ -95,7 +126,7 @@ const Register: FC<RegisterProps> = ({ setRegister }) => {
             </button>
             <div>
               <p className="text-black text-center">
-                Already have an account?{" "}
+                ¿Ya tienes una cuenta?{" "}
                 <span
                   className="text-blue-600 cursor-pointer"
                   onClick={() => setRegister(false)}

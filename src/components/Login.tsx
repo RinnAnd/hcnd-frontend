@@ -93,7 +93,7 @@ const Login: FC<LoginProps> = ({ setRegister }) => {
             <div className="flex flex-col">
               <div className="flex w-full justify-between">
                 <label className="text-black" htmlFor="password">
-                  Password
+                  Contraseña
                 </label>
               </div>
               <input
@@ -102,7 +102,7 @@ const Login: FC<LoginProps> = ({ setRegister }) => {
                     ? "border-red-500"
                     : "border-slate-300"
                 } h-10 rounded-md p-3 active:bg-transparent focus:outline-none text-black`}
-                placeholder="Password"
+                placeholder="Contraseña"
                 type="password"
                 id="password"
                 name="password"
@@ -117,12 +117,12 @@ const Login: FC<LoginProps> = ({ setRegister }) => {
             </button>
             <div>
               <p className="text-black text-center">
-                Don't have an account?{" "}
+                ¿No tienes una cuenta?{" "}
                 <span
                   className="text-blue-600 cursor-pointer"
                   onClick={() => setRegister(true)}
                 >
-                  Create a new account
+                  Signup
                 </span>
               </p>
             </div>
