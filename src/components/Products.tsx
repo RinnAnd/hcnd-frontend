@@ -6,6 +6,7 @@ import Tag from "../utils/floating-tag";
 import EditProduct from "./EditProduct";
 import DeleteWarning from "./DeleteWarning";
 import CreateProduct from "./CreateProduct";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface ProductsProps {}
 
@@ -30,6 +31,7 @@ const Products: FC<ProductsProps> = () => {
   const [showAddTag, setShowAddTag] = useState<boolean>(false);
   const [productId, setProductId] = useState<number | null>(null);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const [createSuccess, setCreateSuccess] = useState<boolean>(false);
   const [showCount, setShowCount] = useState<number>(6);
 
   const loadMore = () => {
@@ -85,10 +87,26 @@ const Products: FC<ProductsProps> = () => {
           <>
             <div className="fixed inset-0 bg-black opacity-50 z-40"></div>
             <div className="fixed inset-0 flex items-center justify-center z-50">
-              <CreateProduct showCreate={setShowCreate} />
+              <CreateProduct
+                showCreate={setShowCreate}
+                setCreateSuccess={setCreateSuccess}
+              />
             </div>
           </>
         )}
+        <AnimatePresence>
+          {createSuccess && (
+            <motion.div
+              className="absolute bg-teal-700 p-4 rounded-md"
+              initial={{ opacity: 0, y: -100 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -100 }}
+              transition={{ duration: 0.4 }}
+            >
+              <p>¡Producto creado con éxito!</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <div className="absolute right-2 top-8 flex flex-col items-center">
           <button
             className="bg-[#404deb] p-2 rounded-full aspect-square shadow-xl"

@@ -4,6 +4,7 @@ import { RequestWithToken } from "../utils/requests";
 
 interface CreateProductProps {
   showCreate: React.Dispatch<React.SetStateAction<boolean>>;
+  setCreateSuccess: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type InputProps = {
@@ -31,7 +32,7 @@ const Input = ({ placeholder, name, type, value, onChange, border }: InputProps)
   );
 };
 
-const CreateProduct: FC<CreateProductProps> = ({ showCreate }) => {
+const CreateProduct: FC<CreateProductProps> = ({ showCreate, setCreateSuccess }) => {
   const [fields, setFields] = useState<Omit<Product, "id">>({
     handle: "",
     title: "",
@@ -65,6 +66,13 @@ const CreateProduct: FC<CreateProductProps> = ({ showCreate }) => {
     });
   }
 
+  function creationSuccess() {
+    setCreateSuccess(true);
+    setTimeout(() => {
+      setCreateSuccess(false);
+    }, 3000);
+  }
+
   const token = JSON.parse(sessionStorage.getItem("token")!);
 
   async function handleSubmit() {
@@ -77,6 +85,7 @@ const CreateProduct: FC<CreateProductProps> = ({ showCreate }) => {
       alert("Parece que tu sesión ha caducado, por favor vuelve a iniciar sesión para realizar cambios.")
     }
     if (response?.status === 201) {
+      creationSuccess();
       showCreate(false);
     }
   }
