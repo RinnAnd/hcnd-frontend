@@ -13,7 +13,7 @@ function App() {
   return (
     <Router>
       <SessionCheck />
-      <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center font-quicksand tracking-tight">
         <MaxWidthContainer>
           <Routes>
             <Route

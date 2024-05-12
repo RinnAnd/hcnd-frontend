@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { Product } from "./Products";
 import { RequestWithToken } from "../utils/requests";
+import { useToast } from "./ui/use-toast";
 
 interface CreateProductProps {
   showCreate: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,10 +14,17 @@ type InputProps = {
   type: string;
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  border: string
+  border: string;
 };
 
-const Input = ({ placeholder, name, type, value, onChange, border }: InputProps) => {
+const Input = ({
+  placeholder,
+  name,
+  type,
+  value,
+  onChange,
+  border,
+}: InputProps) => {
   return (
     <div className="flex w-full items-center justify-center gap-3">
       <p className="w-1/6 text-sm text-center">{placeholder}</p>
@@ -32,7 +40,9 @@ const Input = ({ placeholder, name, type, value, onChange, border }: InputProps)
   );
 };
 
-const CreateProduct: FC<CreateProductProps> = ({ showCreate, setCreateSuccess }) => {
+const CreateProduct: FC<CreateProductProps> = ({ showCreate }) => {
+  const { toast } = useToast();
+
   const [fields, setFields] = useState<Omit<Product, "id">>({
     handle: "",
     title: "",
@@ -66,11 +76,18 @@ const CreateProduct: FC<CreateProductProps> = ({ showCreate, setCreateSuccess })
     });
   }
 
+  function logout() {
+    localStorage.removeItem("name");
+    localStorage.removeItem("token");
+    window.location.reload()
+  }
+
   function creationSuccess() {
-    setCreateSuccess(true);
-    setTimeout(() => {
-      setCreateSuccess(false);
-    }, 3000);
+    toast({
+      title: "¡Producto creado exitosamente!",
+      description: `Agregaste el producto ${fields.title}`,
+      className: "border-teal-950 bg-teal-700 text-white dark",
+    });
   }
 
   const token = JSON.parse(localStorage.getItem("token")!);
@@ -78,11 +95,18 @@ const CreateProduct: FC<CreateProductProps> = ({ showCreate, setCreateSuccess })
   async function handleSubmit() {
     if (!validateFields()) {
       setErrorBorder(true);
-      return
+      return;
     }
     const response = await RequestWithToken("product", "POST", token, fields);
     if (response?.status === 401) {
-      alert("Parece que tu sesión ha caducado, por favor vuelve a iniciar sesión para realizar cambios.")
+      toast({
+        title: "Tu sesión ha caducado",
+        description:
+          "Debes reiniciar sesión para poder realizar cambios. Por ahora estás en modo lectura.",
+        action: <button className="bg-[#5d75f7] px-3 py-2 rounded-md font-semibold flex gap-2 text-sm text-nowrap" onClick={() => logout()}>Cerrar Sesión</button>,
+        className:
+          "bg-[#191d4d] border-[#2b33a8] text-white font-semibold dark",
+      });
     }
     if (response?.status === 201) {
       creationSuccess();
@@ -95,7 +119,9 @@ const CreateProduct: FC<CreateProductProps> = ({ showCreate, setCreateSuccess })
       <div className="bg-[#18181B] h-full flex flex-col p-4 gap-3 justify-around rounded-md items-center">
         <div className="text-center">
           <h1 className="text-xl">Formulario de creación de producto</h1>
-          <p className="text-sm">Recuerda que todos los campos son necesarios</p>
+          <p className="text-sm">
+            Recuerda que todos los campos son necesarios
+          </p>
         </div>
         <div className="flex flex-col gap-2 w-full justify-center items-center">
           <Input
