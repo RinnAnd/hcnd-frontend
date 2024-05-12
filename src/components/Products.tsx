@@ -7,6 +7,7 @@ import EditProduct from "./EditProduct";
 import DeleteWarning from "./DeleteWarning";
 import CreateProduct from "./CreateProduct";
 import { AnimatePresence, motion } from "framer-motion";
+import { useToast } from "./ui/use-toast";
 
 interface ProductsProps {}
 
@@ -24,6 +25,7 @@ export type Product = {
 };
 
 const Products: FC<ProductsProps> = () => {
+  const { toast } = useToast()
   const [products, setProducts] = useState<Product[]>([]);
   const [currentProduct, setCurrentProduct] = useState<Product | null>(null);
   const [showCreate, setShowCreate] = useState<boolean>(false);
@@ -48,15 +50,24 @@ const Products: FC<ProductsProps> = () => {
 
   async function handleDelete(id: number) {
     const token = JSON.parse(localStorage.getItem("token")!);
-    console.log(token);
     const response = await RequestWithToken(`product/${id}`, "DELETE", token);
     if (response?.status === 401) {
-      alert(
-        "Parece que tu sesión ha caducado, por favor vuelve a iniciar sesión para realizar cambios."
-      );
+      toast({
+        title: "Tu sesión ha caducado",
+        description:
+          "Debes reiniciar sesión para poder realizar cambios. Por ahora estás en modo lectura.",
+        action: <button className="bg-[#5d75f7] px-3 py-2 rounded-md font-semibold flex gap-2 text-sm text-nowrap" onClick={() => logOut()}>Cerrar Sesión</button>,
+        className:
+          "bg-[#191d4d] border-[#2b33a8] text-white font-semibold dark",
+      });
     }
     if (response?.status === 200) {
-      window.location.reload();
+      setOpenDelete(false)
+      toast({
+        title: "El producto ha sido eliminado",
+        className: "bg-[#ec7d7d] border-[#7f2929] text-white"
+      })
+      setTimeout(() => window.location.reload(), 2000)      
     }
   }
 

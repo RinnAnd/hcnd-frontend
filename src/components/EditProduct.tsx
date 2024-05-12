@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Product } from "./Products";
 import { useState } from "react";
 import { RequestWithToken } from "../utils/requests";
+import { useToast } from "./ui/use-toast";
 
 interface EditProductProps {
   product: Product | null;
@@ -37,6 +38,7 @@ const Input = ({
 };
 
 const EditProduct: FC<EditProductProps> = ({ product, setCurrentProduct }) => {
+  const { toast } = useToast();
   const token = JSON.parse(localStorage.getItem("token")!);
   const [fields, setFields] = useState<Product | null>(product);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +48,12 @@ const EditProduct: FC<EditProductProps> = ({ product, setCurrentProduct }) => {
       [e.target.name]: e.target.value,
     });
   };
+
+  function logout() {
+    localStorage.removeItem("name");
+    localStorage.removeItem("token");
+    window.location.reload();
+  }
 
   const descriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (!fields) return;
@@ -58,14 +66,38 @@ const EditProduct: FC<EditProductProps> = ({ product, setCurrentProduct }) => {
   const handleSubmit = async () => {
     if (fields === product) return;
     if (!fields) return;
-    const response = await RequestWithToken(`product/${fields?.id}`, "PUT", token!, fields);
+    const response = await RequestWithToken(
+      `product/${fields?.id}`,
+      "PUT",
+      token!,
+      fields
+    );
     if (response?.status === 401) {
-      alert("Parece que tu sesión ha caducado, por favor vuelve a iniciar sesión para realizar cambios.")
+      toast({
+        title: "Tu sesión ha caducado",
+        description:
+          "Debes reiniciar sesión para poder realizar cambios. Por ahora estás en modo lectura.",
+        action: (
+          <button
+            className="bg-[#5d75f7] px-3 py-2 rounded-md font-semibold flex gap-2 text-sm text-nowrap"
+            onClick={() => logout()}
+          >
+            Cerrar Sesión
+          </button>
+        ),
+        className:
+          "bg-[#191d4d] border-[#2b33a8] text-white font-semibold dark",
+      });
     }
     if (response?.status === 200) {
+      toast({
+        title: "¡Producto editado exitosamente!",
+        description: `Has editado el producto ${fields.title}`,
+        className: "border-teal-950 bg-teal-700 text-white dark",
+      });
       setCurrentProduct(null);
     }
-  }
+  };
 
   return (
     <div className="w-[27rem] h-[37rem]">
@@ -138,7 +170,8 @@ const EditProduct: FC<EditProductProps> = ({ product, setCurrentProduct }) => {
           onChange={handleChange}
         />
         <div className="w-full flex gap-4 justify-center items-center">
-          <button className="bg-[#404deb] px-3 py-2 rounded-md font-semibold flex gap-2 w-fit"
+          <button
+            className="bg-[#404deb] px-3 py-2 rounded-md font-semibold flex gap-2 w-fit"
             onClick={handleSubmit}
           >
             Guardar
